@@ -4,12 +4,12 @@ var mysql = require('mysql');
 var bodyParser = require('body-parser');
 
 var path = require('path');
-// var con = mysql.createConnection({
-// 	host: "localhost",
-// 	user: "root",
-// 	password: "password",
-// 	database: "tvshows_db"
-// });
+var con = mysql.createConnection({
+	host: "localhost",
+	user: "root",
+	password: "password",
+	database: "tvshows_db"
+});
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -43,7 +43,18 @@ app.post('/', function (req, res) {
 
 app.post('/endpoint', function (req, res) {
 	console.log(req.body)
-	res.send("got it")
+	var sqlstatement = con.query('INSERT INTO tvshows (tvshow_name) VALUES (?)', req.body.firstname, function (err, result) {
+		/*
+			You can also use this style
+			var sqlstatement = con.query('INSERT INTO tvshows SET ?', { tvshow_name: req.body.firstname}, function(err,result){
+			if you sync your input field names to your table column names you can even make it like
+			 ... con.query('INSERT INTO tvshows SET ?', req.body, functio...
+	
+		*/
+		if (err) return console.log(err)
+		console.log(sqlstatement.sql)
+		res.send("got it")
+	})
 });
 
 app.listen(3001, function () {
