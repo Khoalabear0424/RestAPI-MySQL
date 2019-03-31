@@ -4,21 +4,21 @@ var mysql = require('mysql');
 var bodyParser = require('body-parser');
 
 var path = require('path');
-var con = mysql.createConnection({
-	host: "localhost",
-	user: "root",
-	password: "password",
-	database: "tvshows_db"
-});
+// var con = mysql.createConnection({
+// 	host: "localhost",
+// 	user: "root",
+// 	password: "password",
+// 	database: "tvshows_db"
+// });
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static("public"));
 
-con.connect(function (err, result) {
-	if (err) throw err;
-	console.log("Connected!");
-});
+// con.connect(function (err, result) {
+// 	if (err) throw err;
+// 	console.log("Connected!");
+// });
 
 
 //you won't see this because it'll serve index.html because of app.use(express.static("public"));
@@ -39,6 +39,11 @@ app.post('/', function (req, res) {
 		if (error) res.send(error)
 		else res.json(results);
 	});
+});
+
+app.post('/endpoint', function (req, res) {
+	console.log(req.body)
+	res.send("got it")
 });
 
 app.listen(3001, function () {
