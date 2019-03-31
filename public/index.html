@@ -13,12 +13,21 @@
 	<h2>Index</h2>
 	<button id="tvshows">Generate Movie Info</button>
 
-	<form action="#" method="POST">
+	<!-- <form action="#" method="POST">
 		New Movie:<br>
 		<input type="text" name="firstname" value="The Matrix">
 		<br>
 		<input type="submit" value="Submit">
-	</form>
+	</form> -->
+
+	<div style="padding: 50px">
+		<form id="targetForm">
+			<label>firstname
+				<input type="text" name="firstname" value="The Matrix">
+			</label>
+			<input type="submit" value="Submit">
+		</form>
+	</div>
 
 	<div id="div1"></div>
 	<ol>
@@ -44,6 +53,28 @@
 					}
 				}
 			});
+		})
+
+		$("#targetForm").submit(function (event) {
+			event.preventDefault();
+
+			console.log($(this).serializeArray());
+			console.log($(this).serialize())
+			// depends on how the endpoint wants to received the data. it can be in json or just formdata
+			// 'Content-Type: application/json' -> json
+			// 'Content-Type: application/x-www-form-urlencoded' -> formdata
+			$.ajax({
+				url: "/endpoint",
+				method: "POST",
+				data: $(this).serialize()
+			}).then(function (response) {
+				console.log(response)
+			},
+				function (jqxhr, textStatus) {
+					// failure
+					console.log(textStatus)
+				})
+
 		})
 	</script>
 </body>
