@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Page Title</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" media="screen" href="./assets/css/style.css" />
+</head>
+
+<body>
+	<h2>Index</h2>
+	<button id="tvshows">Generate Movie Info</button>
+
+	<form action="#" method="POST">
+		New Movie:<br>
+		<input type="text" name="firstname" value="The Matrix">
+		<br>
+		<input type="submit" value="Submit">
+	</form>
+
+	<div id="div1"></div>
+	<ol>
+		<li>
+			<img src="pup1.jpg" alt="pupp1">
+		</li>
+		<li>
+			<img src="pup2.jpg" alt="pupp2">
+		</li>
+		<li>
+			<img src="pup3.jpg" alt="pupp3">
+		</li>
+	</ol>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script>
+		$('#tvshows').on('click', () => {
+			$.ajax({
+				url: "/tvshows", success: function (result) {
+					for (var i = 0; i < result.length; i++) {
+						$("#div1").append(JSON.stringify(`${result[i].tvshow_name}`));
+						$("#div1").append("<br>");
+					}
+				}
+			});
+		})
+	</script>
+</body>
+
+</html>

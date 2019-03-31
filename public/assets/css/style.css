@@ -1,0 +1,18 @@
+h1 {
+	font-size: 100px;
+}
+
+body{
+	background-color: gray;
+}
+
+img{
+	float: left;
+	width: 30%;
+	height: auto;
+}
+
+#div1{
+	font-weight: bold;
+	font-size: 20px;
+}

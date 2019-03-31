@@ -1,0 +1,10 @@
+make a new express app that serves 3 images 
+
+puppy-one.png
+puppy-two.png
+
+puppy-three.png
+
+and serves a css file that makes the body have a background-color of blue
+
+and serves an index.html file that displays all the images (and includes the css file)
