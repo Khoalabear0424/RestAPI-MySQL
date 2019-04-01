@@ -41,6 +41,20 @@ app.get('/stats', function (req, res) {
 	});
 });
 
+app.get('/stats-mostwins', function (req, res) {
+	con.query('SELECT School, W, L FROM mmstats_2017 ORDER BY W DESC LIMIT 20;', function (error, results, fields) {
+		if (error) res.send(error)
+		else res.json(results);
+	});
+});
+
+app.get('/stats-mostlosses', function (req, res) {
+	con.query('SELECT School, W, L FROM mmstats_2017 ORDER BY L DESC LIMIT 20;', function (error, results, fields) {
+		if (error) res.send(error)
+		else res.json(results);
+	});
+});
+
 //THIS IS WHERE I NEED HELP!!
 app.post('/', function (req, res) {
 	con.query(`INSERT INTO tvshows (tvshow_name) VALUES ("${req.body.firstname}")`, function (error, results, fields) {
