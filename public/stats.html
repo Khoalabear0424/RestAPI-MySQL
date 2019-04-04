@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Page Title</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" media="screen" href="./assets/css/style.css" />
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	 crossorigin="anonymous">
+</head>
+
+<body>
+	<br>
+	<div class="container">
+		<h2>2017 Stats</h2>
+		<button class="btn btn-primary generateData" onclick=generateData() data-url="/stats" id="stats">Generate Team Stats</button>
+		<button class="btn btn-success generateData" data-url="/stats-mostwins" id="mostWins">Most Wins</button>
+		<button class="btn btn-warning generateData" data-url="/stats-mostlosses" id="mostLosses">Most Losses</button>
+
+		<div style="padding: 50px">
+			<form id="targetForm">
+				<label>
+					<input type="text" name="teamName" placeholder="Team Name">
+					<input type="text" name="wins" placeholder="Wins">
+					<input type="text" name="losses" placeholder="Losses">
+				</label>
+				<input class="btn btn-primary" type="submit" value="Submit">
+			</form>
+		</div>
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">#</th>
+					<th scope="col">School</th>
+					<th scope="col">Wins</th>
+					<th scope="col">Losses</th>
+				</tr>
+			</thead>
+			<tbody id="statsDisplay">
+			</tbody>
+		</table>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+	 crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+	 crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+	 crossorigin="anonymous"></script>
+
+	<script>
+		function getStats() {
+			$("#statsDisplay").empty();
+			$.ajax({
+				url: '/stats.json', success: (result) => {
+					for (var i = 0; i < result.length; i++) {
+						var row = $("<tr>");
+						var iD = $("<th>", { text: i + 1, scope: "row" });
+						var team = $("<th>", { text: JSON.stringify(result[i].School) });
+						var wins = $("<th>", { text: JSON.stringify(result[i].W) });
+						var losses = $("<th>", { text: JSON.stringify(result[i].L) });
+						row.append(iD, team, wins, losses);
+						$("#statsDisplay").prepend(row);
+					}
+				}
+			})
+		}
+
+		getStats();
+
+		$('#targetForm').submit((e) => {
+			e.preventDefault();
+			var teamName = $("input[name='teamName']").val(),
+				wins = $("input[name='wins']").val(),
+				losses = $("input[name='losses']").val();
+			console.log(teamName, wins, losses);
+
+			$.ajax({
+				url: '/stats-insert',
+				method: 'GET',
+				data: {
+					teamName: teamName,
+					wins: wins,
+					losses: losses
+				}
+			}).then((message) => {
+				getStats();
+			});
+		});
+	</script>
+
+</body>
+
+</html>
