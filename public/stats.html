@@ -22,7 +22,9 @@
 		<div style="padding: 50px">
 			<form id="targetForm">
 				<label>
-					<input type="text" name="firstname" value="The Matrix">
+					<input type="text" name="teamName" placeholder="Team Name">
+					<input type="text" name="wins" placeholder="Wins">
+					<input type="text" name="losses" placeholder="Losses">
 				</label>
 				<input class="btn btn-primary" type="submit" value="Submit">
 			</form>
@@ -49,29 +51,44 @@
 	 crossorigin="anonymous"></script>
 
 	<script>
-		function generateData() {
-			var btnUrl = $(this).attr("data-url");
-			alert(btnUrl);
-			console.log(btnUrl);
+		function getStats() {
+			$("#statsDisplay").empty();
+			$.ajax({
+				url: '/stats.json', success: (result) => {
+					for (var i = 0; i < result.length; i++) {
+						var row = $("<tr>");
+						var iD = $("<th>", { text: i + 1, scope: "row" });
+						var team = $("<th>", { text: JSON.stringify(result[i].School) });
+						var wins = $("<th>", { text: JSON.stringify(result[i].W) });
+						var losses = $("<th>", { text: JSON.stringify(result[i].L) });
+						row.append(iD, team, wins, losses);
+						$("#statsDisplay").prepend(row);
+					}
+				}
+			})
 		}
 
-		// $(".generateData").on('click', () => {
-		// 	var btnUrl = $(this).attr("data-url");
-		// 	console.log(btnUrl);
-		// 	$.ajax({
-		// 		url: btnUrl, success: (result) => {
-		// 			for (var i = 0; i < result.length; i++) {
-		// 				var row = $("<tr>");
-		// 				var iD = $("<th>", { text: i + 1, scope: "row" });
-		// 				var team = $("<th>", { text: JSON.stringify(result[i].School) });
-		// 				var wins = $("<th>", { text: JSON.stringify(result[i].W) });
-		// 				var losses = $("<th>", { text: JSON.stringify(result[i].L) });
-		// 				row.append(iD, team, wins, losses);
-		// 				$("#statsDisplay").append(row);
-		// 			}
-		// 		}
-		// 	})
-		// })
+		getStats();
+
+		$('#targetForm').submit((e) => {
+			e.preventDefault();
+			var teamName = $("input[name='teamName']").val(),
+				wins = $("input[name='wins']").val(),
+				losses = $("input[name='losses']").val();
+			console.log(teamName, wins, losses);
+
+			$.ajax({
+				url: '/stats-insert',
+				method: 'GET',
+				data: {
+					teamName: teamName,
+					wins: wins,
+					losses: losses
+				}
+			}).then((message) => {
+				getStats();
+			});
+		});
 	</script>
 
 </body>
